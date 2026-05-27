@@ -2,7 +2,7 @@
 build/
 web/dist/
 web/js/
-web/index.html
+web/esp.html
 
 # obsolete
 build.bat

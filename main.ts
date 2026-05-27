@@ -35,7 +35,7 @@ Timer.repeat(() => {
 const ip = Net.get("IP");
 trace(`Connected! IP: ${ip}\n`);
 
-const indexHTML = new Resource("index.html");
+const indexHTML = new Resource("esp.html");
 
 const server = new Server({port: 80});
 server.callback = function (this: any, message: number, value?: any, etc?: any): any {

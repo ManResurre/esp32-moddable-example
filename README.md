@@ -20,9 +20,8 @@
 
 Сборка:
 1. Vite собирает `web/src/*.ts` → `web/dist/bundle.js` + `bundle.css`
-2. Инлайнит CSS/JS в HTML-шаблон
-3. `html-minifier-terser` минифицирует
-4. `mcconfig` компилирует Moddable-проект в `xs_esp32.bin`
+2. Инлайнит CSS/JS в `web/esp.html`
+3. `mcconfig` компилирует Moddable-проект в `xs_esp32.bin`
 
 ### Прошивка
 
@@ -57,7 +56,6 @@ http://192.168.xxx.xxx/
 ### Локальная разработка UI
 
 ```powershell
-cd web
 npm run dev
 ```
 
@@ -68,15 +66,15 @@ Vite-сервер с HMR на `http://localhost:5173` — для отладки 
 ```
 ├── main.ts              # ESP32 firmware (серво, HTTP, OTA)
 ├── manifest.json         # Moddable manifest
-├── build.ps1             # Скрипт сборки (Vite → Inline → mcconfig)
+├── build.ps1             # Скрипт сборки (Vite → Inline CSS/JS → mcconfig)
 ├── flash.bat             # esptool write-flash
 ├── debug.ps1             # xsbug + serial2xsbug
 ├── log.ps1               # Мониторинг логов
 ├── ota-server.ts         # OTA HTTP-сервер (Node.js)
 ├── tsconfig.json         # TS config для ESP32-кода
 └── web/
-    ├── dev.html           # Vite entry point (разработка)
-    ├── index.template.html # Шаблон для встраивания в прошивку
+    ├── index.html          # Vite entry point (разработка, открывается на localhost:5173)
+    ├── esp.template.html   # Шаблон для сборки прошивки → esp.html
     ├── style.css          # Стили
     ├── vite.config.ts     # Vite config
     ├── package.json       # Зависимости UI

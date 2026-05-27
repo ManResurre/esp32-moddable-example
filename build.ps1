@@ -9,17 +9,15 @@ $viteExit = $LASTEXITCODE
 Pop-Location
 if ($viteExit -ne 0) { Write-Host "vite build failed with exit code $viteExit"; exit 1 }
 
-# inline bundle into template → minified index.html (ESP32 resource)
-$tpl   = Get-Content "$wc\index.template.html" -Raw
+# inline bundle into template → esp.html (ESP32 resource)
+$tpl   = Get-Content "$wc\esp.template.html" -Raw
 $bundle= Get-Content "$wc\dist\bundle.js" -Raw
 $css   = Get-Content "$wc\dist\bundle.css" -Raw
 
 $html = $tpl.Replace('<link rel="stylesheet" href="style.css">', "<style>$css</style>")
 $html = $html.Replace('<script src="bundle.js"></script>', "<script>$bundle</script>")
 
-"$html" | Set-Content "$wc\index.full.html" -NoNewline
-& npx.cmd html-minifier-terser "$wc\index.full.html" --collapse-whitespace --remove-comments --minify-css -o "$wc\index.html" 2>$null
-Remove-Item "$wc\index.full.html" -Force
+"$html" | Set-Content "$wc\esp.html" -NoNewline
 
 $batContent = @"
 @echo off

@@ -5,7 +5,7 @@ export default defineConfig({
 	build: {
 		outDir: "dist",
 		rollupOptions: {
-			input: "dev.html",
+			input: "index.html",
 			output: {
 				entryFileNames: "bundle.js",
 				chunkFileNames: "bundle.js",

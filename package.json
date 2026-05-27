@@ -1,5 +1,12 @@
 {
 	"type": "module",
+	"scripts": {
+		"dev": "npm -C web run dev",
+		"build": "npm -C web run build",
+		"preview": "npm -C web run preview",
+		"lint": "npm -C web run lint",
+		"lint:fix": "npm -C web run lint:fix"
+	},
 	"dependencies": {
 		"typescript": "^6.0.3"
 	}

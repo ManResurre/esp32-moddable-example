@@ -97,7 +97,7 @@ export class ServoPanel extends HTMLElement {
 		ctx.clearRect(0, 0, w, h);
 
 		const cx = 40, cy = h / 2, r = 16;
-		const a = (this.an - 90) * Math.PI / 180;
+		const a = -this.an * Math.PI / 180;
 		const ex = cx + Math.cos(a) * r;
 		const ey = cy + Math.sin(a) * r;
 
@@ -106,7 +106,7 @@ export class ServoPanel extends HTMLElement {
 
 		ctx.strokeStyle = "#555"; ctx.lineWidth = 1;
 		for (let d = 0; d <= 180; d += 30) {
-			const rd = (d - 90) * Math.PI / 180;
+			const rd = -d * Math.PI / 180;
 			ctx.beginPath();
 			ctx.moveTo(cx + Math.cos(rd) * (r - 4), cy + Math.sin(rd) * (r - 4));
 			ctx.lineTo(cx + Math.cos(rd) * r, cy + Math.sin(rd) * r);
@@ -124,8 +124,8 @@ export class ServoPanel extends HTMLElement {
 		ctx.fillText(`${this.an}\u00b0`, cx, h - 8);
 
 		ctx.fillStyle = "#444"; ctx.font = "9px system-ui"; ctx.textAlign = "center";
-		ctx.fillText("0\u00b0", cx - r - 14, cy + 4);
-		ctx.fillText("180\u00b0", cx + r + 14, cy + 4);
+		ctx.fillText("180\u00b0", cx - r - 14, cy + 4);
+		ctx.fillText("0\u00b0", cx + r + 14, cy + 4);
 	}
 }
 

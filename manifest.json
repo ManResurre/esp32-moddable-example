@@ -13,7 +13,7 @@
 	},
 	"resources": {
 		"*": [
-			"./web/index.html"
+			"./web/esp.html"
 		]
 	},
 	"config": {
