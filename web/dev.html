@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Servo Control</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<h1>&#9881; Servo Control</h1>
+
+<servo-panel>
+  <div class="card">
+    <div class="ct">Angle</div>
+    <div class="ad" id="ad">90<span>&deg;</span></div>
+    <input type="range" id="sl" min="0" max="180" value="90">
+  </div>
+
+  <div class="card">
+    <div class="ct">Accelerometer <span class="bd n" id="ab">OFF</span></div>
+    <div class="aa" id="aa">
+      <div style="font-size:2.5rem;margin-bottom:8px;opacity:.6">&#65039;</div>
+      <div class="er" id="ae"></div>
+      <div id="al" style="font-size:.85rem;color:#888">Tap to enable tilt control</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ct">Indicator</div>
+    <canvas id="cv" width="300" height="80"
+      style="width:100%;height:60px;border-radius:8px;background:#0a0a1a"></canvas>
+  </div>
+
+  <div class="sb">
+    <span id="st" class="d">Disconnected</span>
+    <span id="ls"></span>
+  </div>
+</servo-panel>
+
+<script type="module" src="./src/main.ts"></script>
+</body>
+</html>

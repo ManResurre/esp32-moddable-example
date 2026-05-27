@@ -1,0 +1,18 @@
+{
+	"name": "servo-ui",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev.html",
+		"build": "vite build",
+		"preview": "vite preview dev.html",
+		"lint": "eslint src/",
+		"lint:fix": "eslint src/ --fix"
+	},
+	"devDependencies": {
+		"@eslint/js": "^10.0.1",
+		"eslint": "^10.4.0",
+		"typescript-eslint": "^8.60.0",
+		"vite": "^6.3.0"
+	}
+}

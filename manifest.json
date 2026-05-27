@@ -1,0 +1,33 @@
+{
+	"include": [
+		"$(MODDABLE)/examples/manifest_base.json",
+		"$(MODULES)/drivers/button/manifest.json",
+		"$(MODULES)/pins/digital/manifest.json",
+		"$(MODULES)/pins/servo/manifest.json",
+		"$(MODULES)/network/http/manifest.json"
+	],
+	"modules": {
+		"*": [
+			"./main"
+		]
+	},
+	"resources": {
+		"*": [
+			"./web/index.html"
+		]
+	},
+	"config": {
+		"ssid": "Xiaomi Pocophone F1",
+		"password": "12345678"
+	},
+	"platforms": {
+		"esp32": {
+			"include": [
+				"$(MODDABLE)/build/devices/esp32/modules/ota/manifest.json"
+			],
+			"dependency": [
+				{ "idf": "esp_driver_ledc" }
+			]
+		}
+	}
+}

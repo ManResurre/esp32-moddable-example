@@ -1,0 +1,34 @@
+# ESP32 build output
+build/
+web/dist/
+web/js/
+web/index.html
+
+# obsolete
+build.bat
+web/script.js
+
+# dependencies
+node_modules/
+web/node_modules/
+
+# ESP-IDF
+build/tmp/
+
+# OTA
+.bin
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# test / debug artifacts
+testout/
+xsbug.log
+*.bak
+
+# OS
+Thumbs.db
+.DS_Store
