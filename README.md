@@ -6,7 +6,7 @@
 
 - Windows 10/11, Visual Studio 2022 Community
 - ESP-IDF v6.0
-- Moddable SDK
+- Moddable SDK (`C:\Projects\moddable` — путь задан в `build.ps1`)
 - Node.js v24+ (для Vite dev-сервера и OTA-сервера)
 - Python 3.13
 

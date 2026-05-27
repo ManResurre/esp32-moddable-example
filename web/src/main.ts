@@ -1,4 +1,7 @@
-import { ServoPanel } from "./servo-control";
-import { Accelerometer } from "./accelerometer";
+import { registerFAST } from "./fast-registry";
+import "./servo-panel/servo-panel";
 
-export { ServoPanel, Accelerometer };
+registerFAST();
+
+export { ServoPanel } from "./servo-panel/servo-panel";
+export { Accelerometer } from "./accelerometer";

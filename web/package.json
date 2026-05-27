@@ -14,5 +14,10 @@
 		"eslint": "^10.4.0",
 		"typescript-eslint": "^8.60.0",
 		"vite": "^6.3.0"
+	},
+	"dependencies": {
+		"@fluentui/web-components": "^2.6.1",
+		"@microsoft/fast-components": "^2.30.6",
+		"@microsoft/fast-element": "^2.10.4"
 	}
 }

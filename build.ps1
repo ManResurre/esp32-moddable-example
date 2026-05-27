@@ -12,10 +12,8 @@ if ($viteExit -ne 0) { Write-Host "vite build failed with exit code $viteExit"; 
 # inline bundle into template → esp.html (ESP32 resource)
 $tpl   = Get-Content "$wc\esp.template.html" -Raw
 $bundle= Get-Content "$wc\dist\bundle.js" -Raw
-$css   = Get-Content "$wc\dist\bundle.css" -Raw
 
-$html = $tpl.Replace('<link rel="stylesheet" href="style.css">', "<style>$css</style>")
-$html = $html.Replace('<script src="bundle.js"></script>', "<script>$bundle</script>")
+$html = $tpl.Replace('<script src="bundle.js"></script>', "<script>$bundle</script>")
 
 "$html" | Set-Content "$wc\esp.html" -NoNewline
 
