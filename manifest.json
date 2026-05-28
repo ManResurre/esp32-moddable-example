@@ -13,7 +13,8 @@
 	},
 	"resources": {
 		"*": [
-			"./web/esp.html"
+			"./web/esp.html",
+			"./web/bundle.dat"
 		]
 	},
 	"config": {

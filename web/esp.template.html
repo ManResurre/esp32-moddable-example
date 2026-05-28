@@ -13,6 +13,13 @@ h1{font-size:1.3rem;margin:8px 0;color:#0af}
 <body>
 <h1>&#9881; Servo Control</h1>
 <servo-panel></servo-panel>
-<script src="bundle.js"></script>
+	<script>
+		(async()=>{
+			const r=await fetch('/b/0');
+			const s=document.createElement('script');
+			s.textContent=await r.text();
+			document.body.appendChild(s);
+		})();
+	</script>
 </body>
 </html>

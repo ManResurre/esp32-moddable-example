@@ -3,6 +3,7 @@ build/
 web/dist/
 web/js/
 web/esp.html
+*.dat
 
 # obsolete
 build.bat

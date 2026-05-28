@@ -1,45 +1,33 @@
-import { html, when, ref } from "@microsoft/fast-element";
-import type { ServoPanel } from "./servo-panel";
-
-export const template = html<ServoPanel>`
-	<fluent-card>
+export const template = `
+	<div class="card">
 		<div class="card-title">Angle</div>
 		<div class="angle-display">
-			${x => x.angle}<span>&deg;</span>
+			<span id="ad">90</span><span>&deg;</span>
 		</div>
-		<fluent-slider
-			min="0" max="180" step="1"
-			:value="${x => x.angle}"
-			@input="${(x, c) => { x.angle = parseInt((c.event.target as HTMLInputElement).value, 10); }}">
-		</fluent-slider>
-	</fluent-card>
+		<input type="range" id="sl" min="0" max="180" step="1" value="90">
+	</div>
 
-	<fluent-card>
+	<div class="card">
 		<div class="card-title">
 			Accelerometer
-			<fluent-badge appearance="neutral">
-				${x => x.accelOn ? "ON" : "OFF"}
-			</fluent-badge>
+			<span class="badge" id="badge">OFF</span>
 		</div>
-		<div class="accel-area ${x => x.accelOn ? "on" : ""}"
-			 @click="${x => x.toggleAccel()}">
+		<div class="accel-area" id="aa">
 			<div class="accel-icon">&#65039;</div>
-			<div class="accel-error ${x => x.accelError ? "visible" : ""}">${x => x.accelError}</div>
-			<div class="accel-hint">${x => x.accelOn ? "Tap to disable" : "Tap to enable tilt control"}</div>
+			<div class="accel-error" id="ae"></div>
+			<div class="accel-hint" id="al">Tap to enable tilt control</div>
 		</div>
-	</fluent-card>
+	</div>
 
-	<fluent-card>
+	<div class="card">
 		<div class="card-title">Indicator</div>
-		<canvas ${ref("cv")} width="300" height="80"
+		<canvas id="cv" width="300" height="80"
 			style="width:100%;border-radius:8px;background:#0a0a1a">
 		</canvas>
-	</fluent-card>
+	</div>
 
 	<div class="status-bar">
-		<span class="${x => x.connected ? "connected" : "disconnected"}">
-			${x => x.connected ? "Connected" : "Disconnected"}
-		</span>
-		<span>${x => x.lastSentLabel}</span>
+		<span id="st" class="disconnected">Disconnected</span>
+		<span id="ls"></span>
 	</div>
 `;

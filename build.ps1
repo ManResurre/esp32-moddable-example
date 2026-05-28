@@ -2,20 +2,18 @@ $env:MODDABLE = "C:\Projects\moddable"
 $env:IDF_PATH = "C:\Users\korol\esp32\esp-idf"
 $wc = "$PSScriptRoot\web"
 
-# Vite build → bundle.js + bundle.css
+# Vite build → bundle.js
 Push-Location $wc
 npx.cmd vite build 2>&1
 $viteExit = $LASTEXITCODE
 Pop-Location
 if ($viteExit -ne 0) { Write-Host "vite build failed with exit code $viteExit"; exit 1 }
 
-# inline bundle into template → esp.html (ESP32 resource)
-$tpl   = Get-Content "$wc\esp.template.html" -Raw
-$bundle= Get-Content "$wc\dist\bundle.js" -Raw
+# copy template → esp.html
+Copy-Item "$wc\esp.template.html" "$wc\esp.html" -Force
 
-$html = $tpl.Replace('<script src="bundle.js"></script>', "<script>$bundle</script>")
-
-"$html" | Set-Content "$wc\esp.html" -NoNewline
+# Copy bundle as resource (as-is, no padding)
+Copy-Item "$wc\dist\bundle.js" "$wc\bundle.dat" -Force
 
 $batContent = @"
 @echo off

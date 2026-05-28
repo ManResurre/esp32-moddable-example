@@ -1,6 +1,4 @@
-import { css } from "@microsoft/fast-element";
-
-export const styles = css`
+export const styles = `
 	:host {
 		display: flex;
 		flex-direction: column;
@@ -12,11 +10,12 @@ export const styles = css`
 		color: #eee;
 	}
 
-	fluent-card {
+	.card {
 		width: 100%;
 		padding: 16px 20px;
 		background: #1a1a2e;
 		border-radius: 16px;
+		box-sizing: border-box;
 	}
 
 	.card-title {
@@ -41,18 +40,52 @@ export const styles = css`
 		color: #666;
 	}
 
-	fluent-slider::part(thumb) {
+	input[type="range"] {
+		-webkit-appearance: none;
+		appearance: none;
+		width: 100%;
+		height: 6px;
+		background: #333;
+		border-radius: 3px;
+		outline: none;
+		margin: 12px 0;
+		cursor: pointer;
+	}
+
+	input[type="range"]::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		appearance: none;
+		width: 20px;
+		height: 20px;
+		border-radius: 50%;
 		background: #0af;
 		border: 3px solid #1a1a2e;
+		box-sizing: border-box;
 		box-shadow: 0 0 12px rgba(0, 170, 255, 0.4);
+		cursor: pointer;
+		margin-top: -7px;
 	}
 
-	fluent-slider::part(track) {
-		background: #333;
-	}
-
-	fluent-slider::part(fill) {
+	input[type="range"]::-moz-range-thumb {
+		width: 20px;
+		height: 20px;
+		border-radius: 50%;
 		background: #0af;
+		border: 3px solid #1a1a2e;
+		box-sizing: border-box;
+		box-shadow: 0 0 12px rgba(0, 170, 255, 0.4);
+		cursor: pointer;
+	}
+
+	input[type="range"]::-webkit-slider-runnable-track {
+		height: 6px;
+		border-radius: 3px;
+	}
+
+	input[type="range"]::-moz-range-track {
+		background: #333;
+		border-radius: 3px;
+		height: 6px;
 	}
 
 	.accel-area {
@@ -69,6 +102,7 @@ export const styles = css`
 		justify-content: center;
 		transition: background 0.3s, border-color 0.3s;
 		border: 2px solid transparent;
+		box-sizing: border-box;
 	}
 
 	.accel-area.on {
@@ -103,8 +137,13 @@ export const styles = css`
 		margin-top: 4px;
 	}
 
-	fluent-badge {
+	.badge {
 		margin-left: 8px;
+		font-size: 0.75rem;
+		padding: 2px 8px;
+		border-radius: 4px;
+		background: #333;
+		text-transform: uppercase;
 	}
 
 	canvas {

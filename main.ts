@@ -8,6 +8,9 @@ import {Request} from "http";
 import Resource from "Resource";
 import OTA from "ota";
 
+const indexHTML = new Resource("esp.html");
+const bundleJS = new Resource("bundle.dat");
+
 trace("Starting...\n");
 
 const SERVO_PIN = 25;
@@ -20,14 +23,23 @@ trace("Servo init OK\n");
 
 let currentAngle = 90;
 let targetAngle = 90;
-const LERP_SPEED = 0.12;
+let rawTarget = 90;
+let filteredTarget = 90;
+const MAX_SPEED = 5;
+const SMOOTHING = 0.5;
 
 myservo.write(currentAngle);
 Timer.repeat(() => {
+	filteredTarget = Math.round(filteredTarget * (1 - SMOOTHING) + rawTarget * SMOOTHING);
+	targetAngle = filteredTarget;
+
 	if (currentAngle !== targetAngle) {
-		currentAngle += (targetAngle - currentAngle) * LERP_SPEED;
-		if (Math.abs(currentAngle - targetAngle) < 0.5)
+		const diff = targetAngle - currentAngle;
+		if (Math.abs(diff) <= MAX_SPEED) {
 			currentAngle = targetAngle;
+		} else {
+			currentAngle += Math.sign(diff) * MAX_SPEED;
+		}
 		myservo.write(Math.round(currentAngle));
 	}
 }, 20);
@@ -35,52 +47,80 @@ Timer.repeat(() => {
 const ip = Net.get("IP");
 trace(`Connected! IP: ${ip}\n`);
 
-const indexHTML = new Resource("esp.html");
-
-const server = new Server({port: 80});
-server.callback = function (this: any, message: number, value?: any, etc?: any): any {
-	switch (message) {
-	case Server.status:
-		if ("GET" === etc && "/" === value)
-			this.path = "index";
-		else if ("POST" === etc && "/api/angle" === value) {
-			this.path = "angle";
-			this.request = String;
-		}
-		else if ("GET" === etc && "/api/status" === value)
-			this.path = "status";
-		else
-			this.path = null;
-		break;
-	case Server.headersComplete:
-		return "angle" === this.path ? String : false;
-	case Server.requestComplete:
-		if ("angle" === this.path && value) {
-			try {
-				const body = value as string;
-				const match = body.match(/angle=(\d+)/);
-				if (match) {
-					targetAngle = Math.max(0, Math.min(180, parseInt(match[1])));
-					trace(`Target: ${targetAngle}\n`);
+class MyHTTPServer extends Server {
+	callback = function (this: any, message: number, value?: any, etc?: any): any {
+		switch (message) {
+		case Server.status:
+			if ("GET" === etc && "/" === value)
+				this.path = "index";
+			else if ("GET" === etc && typeof value === "string" && value.startsWith("/b/")) {
+				this.path = "chunk";
+				this.chunk = parseInt(value.slice(3), 10);
+			}
+			else if ("POST" === etc && "/api/angle" === value) {
+				this.path = "angle";
+				this.request = String;
+			}
+			else if ("GET" === etc && "/api/status" === value)
+				this.path = "status";
+			else
+				this.path = null;
+			break;
+		case Server.headersComplete:
+			return "angle" === this.path ? String : false;
+		case Server.requestComplete:
+			if ("angle" === this.path && value) {
+				try {
+					const body = value as string;
+					const match = body.match(/angle=(\d+)/);
+					if (match) {
+						rawTarget = Math.max(0, Math.min(180, parseInt(match[1])));
+						trace(`Target: ${rawTarget}\n`);
+					}
+				}
+				catch (e) {
+					trace(`Angle parse error: ${e}\n`);
 				}
 			}
-			catch (e) {
-				trace(`Angle parse error: ${e}\n`);
+			break;
+		case Server.prepareResponse:
+			if ("index" === this.path)
+				return {status: 200, headers: ["Content-Type", "text/html; charset=utf-8"], body: indexHTML};
+			if ("chunk" === this.path) {
+				const offset = (this.chunk ?? 0) * bundleJS.byteLength;
+				if (offset > 0)
+					return {status: 404, body: "Not Found\n"};
+				this.chunkOffset = 0;
+				return {
+					status: 200,
+					headers: ["Content-Type", "application/javascript; charset=utf-8", "Content-Length", bundleJS.byteLength.toString()],
+					body: true
+				};
 			}
+			if ("angle" === this.path || "status" === this.path)
+				return {status: 200, headers: ["Content-Type", "application/json"], body: JSON.stringify({angle: currentAngle}) + "\n"};
+			return {status: 404, body: "Not Found\n"};
+		case Server.responseFragment:
+			if ("chunk" === this.path) {
+				const available = value as number;
+				const remaining = bundleJS.byteLength - this.chunkOffset;
+				if (remaining <= 0)
+					return undefined;
+				const chunkSize = Math.min(available, remaining);
+				const chunk = bundleJS.slice(this.chunkOffset, this.chunkOffset + chunkSize);
+				this.chunkOffset += chunkSize;
+				return chunk;
+			}
+			break;
 		}
-		break;
-	case Server.prepareResponse:
-		if ("index" === this.path)
-			return {status: 200, headers: ["Content-Type", "text/html; charset=utf-8"], body: indexHTML};
-		if ("angle" === this.path || "status" === this.path)
-			return {status: 200, headers: ["Content-Type", "application/json"], body: JSON.stringify({angle: currentAngle}) + "\n"};
-		return {status: 404, body: "Not Found\n"};
-	}
-};
+	};
+}
+
+const server = new MyHTTPServer({port: 80});
 
 trace("HTTP server on port 80\n");
 
-const OTA_HOST = "192.168.160.189";
+const OTA_HOST = "192.168.160.234";
 const OTA_PORT = 8000;
 const OTA_PATH = "/xs_esp32.bin";
 
